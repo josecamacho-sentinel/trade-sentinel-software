@@ -123,10 +123,16 @@
     width: 100%; height: 100%;
     border: 0;
   }
-  .vsl-wrapper iframe.lang-es { display: block; }
-  .vsl-wrapper iframe.lang-en { display: none; }
-  body.en .vsl-wrapper iframe.lang-es { display: none; }
-  body.en .vsl-wrapper iframe.lang-en { display: block; }
+  .vsl-wrapper iframe { display: block; }
+  .vsl-cover {
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    z-index:20; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    background-size:cover; background-position:center; background-repeat:no-repeat;
+  }
+  .vsl-cover.lang-en { display: none; }
+  body.en .vsl-cover.lang-es { display: none; }
+  body.en .vsl-cover.lang-en { display: flex; }
 
   /* ── CTA buttons ── */
   .cta-group { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 18px; }
@@ -340,11 +346,9 @@
     <div class="vsl-wrapper" id="vsl-box">
 
       <!-- Cover ES: miniatura real del vídeo + botón play -->
-      <div id="vsl-cover-es" class="lang-es"
+      <div id="vsl-cover-es" class="vsl-cover lang-es"
         onclick="playVSL('es')"
-        style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:20;cursor:pointer;
-               background:url('https://img.youtube.com/vi/W68k4LCkVHg/maxresdefault.jpg') center/cover no-repeat;
-               display:flex;align-items:center;justify-content:center;">
+        style="background-image:url('https://img.youtube.com/vi/W68k4LCkVHg/maxresdefault.jpg');">
         <div style="width:80px;height:80px;border-radius:50%;background:rgba(0,163,255,0.92);
                     display:flex;align-items:center;justify-content:center;
                     box-shadow:0 4px 30px rgba(0,163,255,0.5);animation:pulse 2s infinite;">
@@ -355,11 +359,9 @@
       </div>
 
       <!-- Cover EN: miniatura real del vídeo + botón play -->
-      <div id="vsl-cover-en" class="lang-en"
+      <div id="vsl-cover-en" class="vsl-cover lang-en"
         onclick="playVSL('en')"
-        style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:20;cursor:pointer;
-               background:url('https://img.youtube.com/vi/485mCNHdi4s/maxresdefault.jpg') center/cover no-repeat;
-               display:flex;align-items:center;justify-content:center;">
+        style="background-image:url('https://img.youtube.com/vi/485mCNHdi4s/maxresdefault.jpg');">
         <div style="width:80px;height:80px;border-radius:50%;background:rgba(0,163,255,0.92);
                     display:flex;align-items:center;justify-content:center;
                     box-shadow:0 4px 30px rgba(0,163,255,0.5);animation:pulse 2s infinite;">
