@@ -350,8 +350,7 @@
       <!-- Un solo cover que cambia según el idioma -->
       <div id="vsl-cover" class="vsl-cover" onclick="playVSL()">
         <img id="vsl-thumb"
-             src="https://img.youtube.com/vi/485mCNHdi4s/maxresdefault.jpg"
-             onerror="this.onerror=null;this.src='https://img.youtube.com/vi/485mCNHdi4s/hqdefault.jpg';"
+             src="https://i.vimeocdn.com/video/2160837175-2c49c6b3adf39d1dcbb44c6d866e6afd76bf552e46d31bc3467bc913d8cabee9-d_1280x720?region=us"
              style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block;">
         <div style="position:relative;z-index:2;width:80px;height:80px;border-radius:50%;background:rgba(0,163,255,0.92);
                     display:flex;align-items:center;justify-content:center;
@@ -368,17 +367,22 @@
     </div>
     <script>
     var VSL_DATA = {
-      es: { id: '485mCNHdi4s' },
-      en: { id: 'W68k4LCkVHg' }
+      es: {
+        id:    '1195047191',
+        thumb: 'https://i.vimeocdn.com/video/2160837175-2c49c6b3adf39d1dcbb44c6d866e6afd76bf552e46d31bc3467bc913d8cabee9-d_1280x720?region=us'
+      },
+      en: {
+        id:    '1195047190',
+        thumb: 'https://i.vimeocdn.com/video/2160836862-dcb8b971d3ee893edee19268692bc5317a6953b99c19c69fe23d95a5e1d26ad5-d_1280x720?region=us'
+      }
     };
 
     function updateVslCover() {
       var lang  = document.body.classList.contains('en') ? 'en' : 'es';
-      var id    = VSL_DATA[lang].id;
+      var data  = VSL_DATA[lang];
       var thumb = document.getElementById('vsl-thumb');
       var cover = document.getElementById('vsl-cover');
-      thumb.onerror = function(){ this.onerror=null; this.src='https://img.youtube.com/vi/'+id+'/hqdefault.jpg'; };
-      thumb.src = 'https://img.youtube.com/vi/' + id + '/maxresdefault.jpg';
+      thumb.src = data.thumb;
       document.getElementById('vsl-player').innerHTML = '';
       cover.style.display = '';
     }
@@ -388,9 +392,9 @@
       var id   = VSL_DATA[lang].id;
       document.getElementById('vsl-cover').style.display = 'none';
       document.getElementById('vsl-player').innerHTML =
-        '<iframe src="https://www.youtube.com/embed/' + id +
-        '?autoplay=1&rel=0&iv_load_policy=3&vq=hd1080&loop=1&playlist=' + id + '" ' +
-        'allow="autoplay; encrypted-media" allowfullscreen ' +
+        '<iframe src="https://player.vimeo.com/video/' + id +
+        '?autoplay=1&title=0&byline=0&portrait=0&badge=0&dnt=1" ' +
+        'allow="autoplay; fullscreen; picture-in-picture" allowfullscreen ' +
         'style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"></iframe>';
     }
 
