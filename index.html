@@ -117,13 +117,19 @@
     padding-bottom: 44%; /* ajustado al vídeo */
     height: 0;
   }
-  .vsl-wrapper iframe {
+  .vsl-wrapper iframe,
+  #vsl-player iframe {
+    position: absolute !important;
+    top: 0 !important; left: 0 !important;
+    width: 100% !important; height: 100% !important;
+    border: 0 !important;
+    display: block !important;
+  }
+  #vsl-player {
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    border: 0;
   }
-  .vsl-wrapper iframe { display: block; }
   .vsl-cover {
     position:absolute; top:0; left:0; width:100%; height:100%;
     z-index:20; cursor:pointer;
@@ -345,8 +351,8 @@
       <!-- Un solo cover que cambia según el idioma -->
       <div id="vsl-cover" class="vsl-cover" onclick="playVSL()">
         <img id="vsl-thumb"
-             src="https://img.youtube.com/vi/485mCNHdi4s/maxresdefault.jpg"
-             onerror="this.onerror=null;this.src='https://img.youtube.com/vi/485mCNHdi4s/hqdefault.jpg';"
+             src="https://img.youtube.com/vi/W68k4LCkVHg/maxresdefault.jpg"
+             onerror="this.onerror=null;this.src='https://img.youtube.com/vi/W68k4LCkVHg/hqdefault.jpg';"
              style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block;">
         <div style="position:relative;z-index:2;width:80px;height:80px;border-radius:50%;background:rgba(0,163,255,0.92);
                     display:flex;align-items:center;justify-content:center;
@@ -357,43 +363,89 @@
         </div>
       </div>
 
-      <!-- Un solo iframe, se carga al pulsar play -->
-      <iframe id="vsl-iframe" src="" frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen
-        style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;">
-      </iframe>
+      <!-- Contenedor para el player de YouTube -->
+      <div id="vsl-player" style="position:absolute;top:0;left:0;width:100%;height:100%;"></div>
 
     </div>
     <script>
     var VSL_DATA = {
-      es: {
-        id:   '485mCNHdi4s',
-        src:  'https://www.youtube.com/embed/485mCNHdi4s?autoplay=1&modestbranding=1&rel=0&iv_load_policy=3'
-      },
-      en: {
-        id:   'W68k4LCkVHg',
-        src:  'https://www.youtube.com/embed/W68k4LCkVHg?autoplay=1&modestbranding=1&rel=0&iv_load_policy=3'
-      }
+      es: { id: 'W68k4LCkVHg' },
+      en: { id: '485mCNHdi4s' }
     };
+    var ytPlayer = null;
+    var ytAPIReady = false;
+
+    // Cargar API de YouTube IFrame
+    (function(){
+      var tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.head.appendChild(tag);
+    })();
+
+    function onYouTubeIframeAPIReady() {
+      ytAPIReady = true;
+    }
+
     function updateVslCover() {
-      var lang   = document.body.classList.contains('en') ? 'en' : 'es';
-      var data   = VSL_DATA[lang];
-      var thumb  = document.getElementById('vsl-thumb');
-      var cover  = document.getElementById('vsl-cover');
-      var iframe = document.getElementById('vsl-iframe');
-      // Actualizar miniatura con fallback automático si maxresdefault no existe
-      thumb.onerror = function(){ this.onerror=null; this.src='https://img.youtube.com/vi/'+data.id+'/hqdefault.jpg'; };
-      thumb.src = 'https://img.youtube.com/vi/' + data.id + '/maxresdefault.jpg';
-      // Reset player: detener vídeo y mostrar portada
-      iframe.src = '';
+      var lang  = document.body.classList.contains('en') ? 'en' : 'es';
+      var id    = VSL_DATA[lang].id;
+      var thumb = document.getElementById('vsl-thumb');
+      var cover = document.getElementById('vsl-cover');
+      thumb.onerror = function(){ this.onerror=null; this.src='https://img.youtube.com/vi/'+id+'/hqdefault.jpg'; };
+      thumb.src = 'https://img.youtube.com/vi/' + id + '/maxresdefault.jpg';
+      // Parar vídeo y mostrar portada
+      if (ytPlayer && ytPlayer.stopVideo) { try { ytPlayer.stopVideo(); } catch(e){} }
+      ytPlayer = null;
+      document.getElementById('vsl-player').innerHTML = '';
       cover.style.display = '';
     }
+
     function playVSL() {
       var lang = document.body.classList.contains('en') ? 'en' : 'es';
+      var id   = VSL_DATA[lang].id;
       document.getElementById('vsl-cover').style.display = 'none';
-      document.getElementById('vsl-iframe').src = VSL_DATA[lang].src;
+
+      function createPlayer() {
+        var wrapper = document.getElementById('vsl-box');
+        ytPlayer = new YT.Player('vsl-player', {
+          width: wrapper.offsetWidth,
+          height: wrapper.offsetHeight,
+          videoId: id,
+          playerVars: {
+            autoplay: 1,
+            modestbranding: 1,
+            rel: 0,
+            iv_load_policy: 3,
+            hd: 1
+          },
+          events: {
+            onReady: function(e) {
+              try { e.target.setPlaybackQuality('hd1080'); } catch(ex){}
+              e.target.playVideo();
+            },
+            onStateChange: function(e) {
+              if (e.data === YT.PlayerState.PLAYING) {
+                try { e.target.setPlaybackQuality('hd1080'); } catch(ex){}
+              }
+            }
+          }
+        });
+      }
+
+      if (ytAPIReady) {
+        createPlayer();
+      } else {
+        // Esperar a que la API cargue
+        var check = setInterval(function(){
+          if (window.YT && YT.Player) {
+            clearInterval(check);
+            ytAPIReady = true;
+            createPlayer();
+          }
+        }, 100);
+      }
     }
+
     updateVslCover();
     </script>
 
