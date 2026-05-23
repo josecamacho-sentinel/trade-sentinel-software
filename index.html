@@ -343,9 +343,12 @@
     <div class="vsl-wrapper" id="vsl-box">
 
       <!-- Un solo cover que cambia según el idioma -->
-      <div id="vsl-cover" class="vsl-cover" onclick="playVSL()"
-           style="background-image:url('https://img.youtube.com/vi/W68k4LCkVHg/hqdefault.jpg');">
-        <div style="width:80px;height:80px;border-radius:50%;background:rgba(0,163,255,0.92);
+      <div id="vsl-cover" class="vsl-cover" onclick="playVSL()">
+        <img id="vsl-thumb"
+             src="https://img.youtube.com/vi/485mCNHdi4s/maxresdefault.jpg"
+             onerror="this.onerror=null;this.src='https://img.youtube.com/vi/485mCNHdi4s/hqdefault.jpg';"
+             style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block;">
+        <div style="position:relative;z-index:2;width:80px;height:80px;border-radius:50%;background:rgba(0,163,255,0.92);
                     display:flex;align-items:center;justify-content:center;
                     box-shadow:0 4px 30px rgba(0,163,255,0.5);animation:pulse 2s infinite;">
           <svg width="32" height="32" fill="white" viewBox="0 0 24 24" style="margin-left:5px;">
@@ -365,19 +368,23 @@
     <script>
     var VSL_DATA = {
       es: {
-        thumb: 'https://img.youtube.com/vi/W68k4LCkVHg/hqdefault.jpg',
-        src:   'https://www.youtube.com/embed/W68k4LCkVHg?autoplay=1&modestbranding=1&rel=0&iv_load_policy=3'
+        id:   '485mCNHdi4s',
+        src:  'https://www.youtube.com/embed/485mCNHdi4s?autoplay=1&modestbranding=1&rel=0&iv_load_policy=3'
       },
       en: {
-        thumb: 'https://img.youtube.com/vi/485mCNHdi4s/hqdefault.jpg',
-        src:   'https://www.youtube.com/embed/485mCNHdi4s?autoplay=1&modestbranding=1&rel=0&iv_load_policy=3'
+        id:   'W68k4LCkVHg',
+        src:  'https://www.youtube.com/embed/W68k4LCkVHg?autoplay=1&modestbranding=1&rel=0&iv_load_policy=3'
       }
     };
     function updateVslCover() {
-      var lang = document.body.classList.contains('en') ? 'en' : 'es';
+      var lang   = document.body.classList.contains('en') ? 'en' : 'es';
+      var data   = VSL_DATA[lang];
+      var thumb  = document.getElementById('vsl-thumb');
       var cover  = document.getElementById('vsl-cover');
       var iframe = document.getElementById('vsl-iframe');
-      cover.style.backgroundImage = "url('" + VSL_DATA[lang].thumb + "')";
+      // Actualizar miniatura con fallback automático si maxresdefault no existe
+      thumb.onerror = function(){ this.onerror=null; this.src='https://img.youtube.com/vi/'+data.id+'/hqdefault.jpg'; };
+      thumb.src = 'https://img.youtube.com/vi/' + data.id + '/maxresdefault.jpg';
       // Reset player: detener vídeo y mostrar portada
       iframe.src = '';
       cover.style.display = '';
