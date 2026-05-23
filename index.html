@@ -111,6 +111,7 @@
   .vsl-wrapper {
     max-width: 780px; margin: 0 auto 48px;
     border-radius: 16px; overflow: hidden;
+    aspect-ratio: 16/9; position: relative;
     border: 1px solid rgba(0,163,255,0.25);
     box-shadow: 0 0 60px rgba(0,163,255,0.1);
     background: var(--bg2);
@@ -137,6 +138,10 @@
     100% { box-shadow: 0 0 0 0 rgba(0,163,255,0); }
   }
   .vsl-label { color: var(--muted); font-size: 14px; }
+  .vsl-wrapper iframe.lang-es,
+  .vsl-wrapper iframe.lang-en { display: block; }
+  body.en .vsl-wrapper iframe.lang-es { display: none; }
+  body:not(.en) .vsl-wrapper iframe.lang-en { display: none; }
 
   /* ── CTA buttons ── */
   .cta-group { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 18px; }
@@ -348,28 +353,22 @@
 
     <!-- VSL -->
     <div class="vsl-wrapper" id="vsl-box">
-      <div class="lang-es">
-        <iframe
-          width="100%" height="100%"
-          src="https://www.youtube.com/embed/W68k4LCkVHg"
-          title="TRADE SENTINEL — Cómo funciona"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
-          style="border-radius:12px; aspect-ratio:16/9; width:100%; display:block;">
-        </iframe>
-      </div>
-      <div class="lang-en">
-        <iframe
-          width="100%" height="100%"
-          src="https://www.youtube.com/embed/485mCNHdi4s"
-          title="TRADE SENTINEL — How it works"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
-          style="border-radius:12px; aspect-ratio:16/9; width:100%; display:block;">
-        </iframe>
-      </div>
+      <iframe class="lang-es"
+        src="https://www.youtube.com/embed/W68k4LCkVHg?controls=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1"
+        title="TRADE SENTINEL — Cómo funciona"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+        style="position:absolute; top:0; left:0; width:100%; height:100%; border:0; border-radius:16px;">
+      </iframe>
+      <iframe class="lang-en"
+        src="https://www.youtube.com/embed/485mCNHdi4s?controls=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1"
+        title="TRADE SENTINEL — How it works"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+        style="position:absolute; top:0; left:0; width:100%; height:100%; border:0; border-radius:16px;">
+      </iframe>
     </div>
 
     <div class="cta-group">
