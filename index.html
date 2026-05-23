@@ -114,7 +114,7 @@
     border: 1px solid rgba(0,163,255,0.25);
     box-shadow: 0 0 60px rgba(0,163,255,0.1);
     position: relative;
-    padding-bottom: 44%; /* ajustado al vídeo */
+    padding-bottom: 56.25%; /* 16:9 estándar HD */
     height: 0;
   }
   .vsl-wrapper iframe,
@@ -407,9 +407,11 @@
 
       function createPlayer() {
         var wrapper = document.getElementById('vsl-box');
+        var w = wrapper.offsetWidth || 780;
+        var h = Math.round(w * 0.5625); // 16:9 real
         ytPlayer = new YT.Player('vsl-player', {
-          width: wrapper.offsetWidth,
-          height: wrapper.offsetHeight,
+          width: w,
+          height: h,
           videoId: id,
           playerVars: {
             autoplay: 1,
