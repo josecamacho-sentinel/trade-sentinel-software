@@ -343,7 +343,8 @@
     <div class="vsl-wrapper" id="vsl-box">
 
       <!-- Un solo cover que cambia según el idioma -->
-      <div id="vsl-cover" class="vsl-cover" onclick="playVSL()">
+      <div id="vsl-cover" class="vsl-cover" onclick="playVSL()"
+           style="background-image:url('https://img.youtube.com/vi/W68k4LCkVHg/maxresdefault.jpg');">
         <div style="width:80px;height:80px;border-radius:50%;background:rgba(0,163,255,0.92);
                     display:flex;align-items:center;justify-content:center;
                     box-shadow:0 4px 30px rgba(0,163,255,0.5);animation:pulse 2s infinite;">
@@ -374,7 +375,12 @@
     };
     function updateVslCover() {
       var lang = document.body.classList.contains('en') ? 'en' : 'es';
-      document.getElementById('vsl-cover').style.backgroundImage = "url('" + VSL_DATA[lang].thumb + "')";
+      var cover  = document.getElementById('vsl-cover');
+      var iframe = document.getElementById('vsl-iframe');
+      cover.style.backgroundImage = "url('" + VSL_DATA[lang].thumb + "')";
+      // Reset player: detener vídeo y mostrar portada
+      iframe.src = '';
+      cover.style.display = '';
     }
     function playVSL() {
       var lang = document.body.classList.contains('en') ? 'en' : 'es';
